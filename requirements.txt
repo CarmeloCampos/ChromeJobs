@@ -1,0 +1,2 @@
+selenium==4.19.0
+flask==3.0.3

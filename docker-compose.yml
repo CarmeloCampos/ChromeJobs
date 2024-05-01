@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  chromelocal:
+    image: selenium/standalone-chrome:latest
+    shm_size: 2gb
+    restart: unless-stopped
+    networks:
+      apinet:
+        ipv4_address: 192.168.54.4
+    environment:
+      - SE_NODE_MAX_SESSIONS=100
+      - SE_SESSION_REQUEST_TIMEOUT=86400
+      - SE_NODE_SESSION_TIMEOUT=86400
+    expose:
+      - "4444:4444"
+
+  apijobs:
+    build: .
+    depends_on:
+      - chromelocal
+    restart: unless-stopped
+    networks:
+      - apinet
+    ports:
+      - "5000:5000"
+
+
+networks:
+  apinet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.54.0/24
