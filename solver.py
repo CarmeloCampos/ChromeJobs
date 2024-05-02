@@ -3,6 +3,7 @@ from urllib.parse import urlparse, parse_qs, unquote
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
@@ -13,6 +14,7 @@ class Solver(object):
         options = webdriver.ChromeOptions()
         options.add_extension("Captcha-Solver-Auto-captcha-solving-service.crx")
         options.add_argument("--user-agent=" + user_agent)
+        options.add_argument("--disable-cache")
         self.driver: WebDriver = webdriver.Remote(command_executor="http://192.168.54.4:4444/wd/hub", options=options)
 
     def prepare(self):
@@ -48,6 +50,13 @@ class Solver(object):
                 return False
 
             sleep(1)
+
+    def clear_cache(self):
+        self.driver.delete_all_cookies()
+        print("Clearing cache")
+        self.driver.get('chrome://settings/clearBrowserData')
+        sleep(1)
+        self.driver.find_element(By.XPATH, '//settings-ui').send_keys(Keys.ENTER)
 
     def solve(self, url_captcha):
         if self.intent_solve(url_captcha):

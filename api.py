@@ -14,6 +14,7 @@ solver.prepare()
 
 @app.route('/solve-captcha', methods=['POST'])
 def solve_captcha():
+    solver.clear_cache()
     print("Solving captcha")
     data = request.get_json()
     url_captcha = data.get('url')
