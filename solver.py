@@ -34,7 +34,7 @@ class Solver(object):
     def intent_solve(self, url_captcha):
         print("Solving captcha")
         self.driver.get(url_captcha)
-
+        sleep(2)
         start_solve = time()
         while True:
             url_now = self.driver.current_url
@@ -59,6 +59,7 @@ class Solver(object):
         self.driver.find_element(By.XPATH, '//settings-ui').send_keys(Keys.ENTER)
 
     def solve(self, url_captcha):
+        sleep(2)
         if self.intent_solve(url_captcha):
             parsed_url = urlparse(self.driver.current_url)
             query_params = parse_qs(parsed_url.query)
